@@ -13,7 +13,6 @@
 
 
 <div class="container" >
-
 	<div class="row" >
 		<div class="col-md-6" >
 			<div class="parent"
@@ -23,6 +22,15 @@
 					       ng-model="name" />
 				</label >
 				<p >{{name}}</p >
+
+				<div class="child" ng-controller="ChildController">
+					<label >
+						<input type="text"
+						       ng-model="name" />
+					</label >
+					<button class="btn" ng-click="reset()">Reset</button>
+					<p>{{name}}</p>
+				</div>
 			</div >
 		</div >
 	</div >
