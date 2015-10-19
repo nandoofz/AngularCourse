@@ -20,6 +20,10 @@ app.controller('PersonDetailController', function ($scope, ContactService) {
 	$scope.save = function(){
 		$scope.contacts.updateContact($scope.contacts.selectedPerson);
 	};
+
+	$scope.remove = function(){
+		$scope.contacts.removeContact($scope.contacts.selectedPerson);
+	};
 });
 
 app.factory('Contact', function ($resource) {
@@ -37,7 +41,6 @@ app.controller('PersonListController', function ($scope, ContactService) {
 	$scope.contacts = ContactService;
 
 	$scope.loadMore = function () {
-		console.log("Load More!!!");
 		$scope.contacts.loadMore();
 	};
 
@@ -94,7 +97,6 @@ app.service('ContactService', function (Contact) {
 				};
 
 				Contact.get(params, function(data){
-					console.log(data);
 					angular.forEach(data.results, function(person) {
 						self.persons.push(new Contact(person));
 					});
@@ -117,6 +119,15 @@ app.service('ContactService', function (Contact) {
 			self.isSaving = true;
 			person.$update().then(function (){
 				self.isSaving = false;
+			});
+		},
+		'removeContact': function (person){
+			self.isDeleting = true;
+			person.$remove().then(function (){
+				self.isDeleting = false;
+				var index = self.persons.indexOf(person);
+				self.persons.splice(index, 1);
+				self.selectedPerson = null;
 			});
 		}
 	};
