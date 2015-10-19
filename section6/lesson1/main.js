@@ -1,12 +1,17 @@
 var app = angular.module('codecraft', [
 	'ngResource',
 	'infinite-scroll',
-	'angularSpinner'
+	'angularSpinner',
+	'jcs-autoValidate',
+	'angular-ladda'
 ]);
 
-app.config(function ($httpProvider, $resourceProvider) {
+app.config(function ($httpProvider, $resourceProvider, laddaProvider) {
 	$httpProvider.defaults.headers.common['Authorization'] = 'Token 17c142ef60041a2d0c41a2f73cd9a09201896560';
 	$resourceProvider.defaults.stripTrailingSlashes = false;
+	laddaProvider.setOption({
+		style: 'expand-right'
+	});
 });
 
 app.controller('PersonDetailController', function ($scope, ContactService) {
