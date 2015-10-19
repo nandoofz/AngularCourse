@@ -7,11 +7,15 @@ var app = angular.module('codecraft', [
 	'mgcrea.ngStrap'
 ]);
 
-app.config(function ($httpProvider, $resourceProvider, laddaProvider) {
+app.config(function ($httpProvider, $resourceProvider, laddaProvider, $datepickerProvider) {
 	$httpProvider.defaults.headers.common['Authorization'] = 'Token 17c142ef60041a2d0c41a2f73cd9a09201896560';
 	$resourceProvider.defaults.stripTrailingSlashes = false;
 	laddaProvider.setOption({
 		style: 'expand-right'
+	});
+	angular.extend($datepickerProvider.defaults, {
+		dateFormat: 'd/M/yyyy',
+		autoclose: true
 	});
 });
 
