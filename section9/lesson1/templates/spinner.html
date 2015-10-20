@@ -1,6 +1,7 @@
-<div class="spinner"
-     ng-show="contacts.isLoading" >
+<div class="spinner" ng-show="isLoading" >
 	<span us-spinner="{radius:8, width:5, length: 3, lines:9}" ></span >
 
-	<p >Loading...</p >
+	<span ng-transclude>
+		<p >Loading...</p >
+	</span>
 </div >
