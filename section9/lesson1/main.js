@@ -48,7 +48,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 });
 
 app.config(function ($httpProvider, $resourceProvider, laddaProvider, $datepickerProvider) {
-	$httpProvider.defaults.headers.common['Authorization'] = 'Token 20002cd74d5ce124ae219e739e18956614aab490';
+	$httpProvider.defaults.headers.common['Authorization'] = 'Token 17c142ef60041a2d0c41a2f73cd9a09201896560';
 	$resourceProvider.defaults.stripTrailingSlashes = false;
 	laddaProvider.setOption({
 		style: 'expand-right'
@@ -74,6 +74,12 @@ app.factory("Contact", function ($resource) {
 			method: 'PUT'
 		}
 	});
+});
+
+app.directive('ccSpinner', function () {
+	return {
+		'templateUrl': 'templates/spinner.html'
+	};
 });
 
 app.controller('PersonDetailController', function ($scope, $stateParams, $state, ContactService) {
