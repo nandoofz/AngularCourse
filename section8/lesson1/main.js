@@ -105,23 +105,9 @@ app.controller('PersonListController', function ($scope, $modal, ContactService)
 				$scope.createModal.hide();
 			})
 	};
-
-	$scope.$watch('search', function (newVal, oldVal) {
-		if (angular.isDefined(newVal)) {
-			$scope.contacts.doSearch(newVal);
-		}
-	})
-
-	$scope.$watch('order', function (newVal, oldVal) {
-		if (angular.isDefined(newVal)) {
-			$scope.contacts.doOrder(newVal);
-		}
-	})
-
 });
 
-app.service('ContactService', function (Contact, $q, toaster) {
-	
+app.service('ContactService', function (Contact, $rootScope, $q, toaster) {
 	var self = {
 		'page': 1,
 		'hasMore': true,
@@ -130,6 +116,7 @@ app.service('ContactService', function (Contact, $q, toaster) {
 		'selectedPerson': null,
 		'persons': [],
 		'search': null,
+		'ordering': 'name',
 		'getPerson': function (email) {
 			console.log(email);
 			for (var i = 0; i < self.persons.length; i++) {
@@ -140,18 +127,16 @@ app.service('ContactService', function (Contact, $q, toaster) {
 
 			}
 		},
-		'doSearch': function (search) {
+		'doSearch': function () {
 			self.hasMore = true;
 			self.page = 1;
 			self.persons = [];
-			self.search = search;
 			self.loadContacts();
 		},
-		'doOrder': function (order) {
+		'doOrder': function () {
 			self.hasMore = true;
 			self.page = 1;
 			self.persons = [];
-			self.ordering = order;
 			self.loadContacts();
 		},
 		'loadContacts': function () {
@@ -221,10 +206,28 @@ app.service('ContactService', function (Contact, $q, toaster) {
 				d.resolve();
 			});
 			return d.promise;
+		},
+		'watchFilters': function () {
+			$rootScope.$watch(function () {
+				return self.search;
+			}, function (newVal) {
+				if (angular.isDefined(newVal)) {
+					self.doSearch();
+				}
+			});
+
+			$rootScope.$watch(function () {
+				return self.ordering;
+			}, function (newVal) {
+				if (angular.isDefined(newVal)) {
+					self.doOrder();
+				}
+			});
 		}
 	};
 
 	self.loadContacts();
+	self.watchFilters();
 
 	return self;
 
