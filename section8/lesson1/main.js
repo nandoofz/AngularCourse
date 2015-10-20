@@ -63,7 +63,7 @@ app.factory("Contact", function ($resource) {
 
 app.controller('PersonDetailController', function ($scope, $stateParams, ContactService) {
 	$scope.contacts = ContactService;
-
+	$scope.contacts.selectedPerson = $scope.contacts.getPerson($stateParams.email);
 
 	$scope.save = function () {
 		$scope.contacts.updateContact($scope.contacts.selectedPerson)
@@ -117,12 +117,8 @@ app.controller('PersonListController', function ($scope, $modal, ContactService)
 });
 
 app.service('ContactService', function (Contact, $q, toaster) {
-
-
+	
 	var self = {
-		'addPerson': function (person) {
-			this.persons.push(person);
-		},
 		'page': 1,
 		'hasMore': true,
 		'isLoading': false,
@@ -130,6 +126,16 @@ app.service('ContactService', function (Contact, $q, toaster) {
 		'selectedPerson': null,
 		'persons': [],
 		'search': null,
+		'getPerson': function (email) {
+			console.log(email);
+			for (var i = 0; i < self.persons.length; i++) {
+				var obj = self.persons[i];
+				if (obj.email == email) {
+					return obj;
+				}
+
+			}
+		},
 		'doSearch': function (search) {
 			self.hasMore = true;
 			self.page = 1;

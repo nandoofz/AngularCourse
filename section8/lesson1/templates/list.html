@@ -61,7 +61,6 @@
 		    ng-style="{
 				 'background-color': person.email == contacts.selectedPerson.email ? 'lightgray' : ''
 			}"
-		    ng-click="contacts.selectedPerson = person"
 		    ui-sref="edit({email:person.email})">
 			<td >
 				<img ng-src="{{person.photo|defaultImage:'./avatar.png'}}"
@@ -72,8 +71,6 @@
 			<td >{{ person.email }}</td >
 			<td >{{ person.phonenumber }}</td >
 		</tr >
-
-
 	</table >
 
 	<div ng-show="contacts.persons.length == 0 && !contacts.isLoading" >
