@@ -6,11 +6,28 @@ var app = angular.module('codecraft', [
 	'angular-ladda',
 	'mgcrea.ngStrap',
 	'toaster',
-	'ngAnimate'
+	'ngAnimate',
+	'ui.router'
 ]);
 
+app.config(function ($stateProvider, $urlRouterProvider) {
+	$stateProvider
+		.state('list', {
+			url: "/",
+			templateUrl: 'templates/list.html',
+			controller: 'PersonListController'
+		}).
+		state('edit', {
+			url: "/edit/:email",
+			templateUrl: 'templates/edit.html',
+			controller: 'PersonDetailController'
+		});
+
+	$urlRouterProvider.otherwise('/');
+});
+
 app.config(function ($httpProvider, $resourceProvider, laddaProvider, $datepickerProvider) {
-	$httpProvider.defaults.headers.common['Authorization'] = 'Token 20002cd74d5ce124ae219e739e18956614aab490';
+	$httpProvider.defaults.headers.common['Authorization'] = 'Token 17c142ef60041a2d0c41a2f73cd9a09201896560';
 	$resourceProvider.defaults.stripTrailingSlashes = false;
 	laddaProvider.setOption({
 		style: 'expand-right'
@@ -44,7 +61,7 @@ app.factory("Contact", function ($resource) {
 	});
 });
 
-app.controller('PersonDetailController', function ($scope, ContactService) {
+app.controller('PersonDetailController', function ($scope, $stateParams, ContactService) {
 	$scope.contacts = ContactService;
 
 
