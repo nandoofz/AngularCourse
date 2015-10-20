@@ -16,11 +16,16 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 			url: "/",
 			templateUrl: 'templates/list.html',
 			controller: 'PersonListController'
-		}).
-		state('edit', {
+		})
+		.state('edit', {
 			url: "/edit/:email",
 			templateUrl: 'templates/edit.html',
 			controller: 'PersonDetailController'
+		})
+		.state('create', {
+			url: "/create",
+			templateUrl: 'templates/edit.html',
+			controller: 'PersonCreateController'
 		});
 
 	$urlRouterProvider.otherwise('/');
@@ -62,6 +67,7 @@ app.factory("Contact", function ($resource) {
 });
 
 app.controller('PersonDetailController', function ($scope, $stateParams, $state, ContactService) {
+	$scope.mode = "Edit";
 	$scope.contacts = ContactService;
 	$scope.contacts.selectedPerson = $scope.contacts.getPerson($stateParams.email);
 
@@ -76,6 +82,18 @@ app.controller('PersonDetailController', function ($scope, $stateParams, $state,
 			$state.go('list');
 		});
 	}
+});
+
+app.controller('PersonCreateController', function ($scope, $state, ContactService) {
+	$scope.mode = "Create";
+	$scope.contacts = ContactService;
+
+	$scope.save = function () {
+		$scope.contacts.createContact($scope.contacts.selectedPerson)
+			.then(function () {
+				$state.go("list");
+			})
+	};
 });
 
 app.controller('PersonListController', function ($scope, $modal, ContactService) {
@@ -96,14 +114,6 @@ app.controller('PersonListController', function ($scope, $modal, ContactService)
 			template: 'templates/modal.create.tpl.html',
 			show: true
 		})
-	};
-
-	$scope.createContact = function () {
-		console.log("createContact");
-		$scope.contacts.createContact($scope.contacts.selectedPerson)
-			.then(function () {
-				$scope.createModal.hide();
-			})
 	};
 });
 
