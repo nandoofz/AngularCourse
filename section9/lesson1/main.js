@@ -78,11 +78,22 @@ app.factory("Contact", function ($resource) {
 
 app.directive('ccSpinner', function () {
 	return {
-		'transclude': true,
-		'restrict': 'E',
+		'restrict': 'AE',
 		'templateUrl': 'templates/spinner.html',
 		'scope': {
-			'isLoading': '='
+			'isLoading': '=',
+			'message': '@'
+		}
+	}
+});
+
+app.directive('ccCard', function () {
+	return {
+		'restrict': 'AE',
+		'templateUrl': 'templates/card.html',
+		'scope': {
+			'user':'=',
+			'deleteUser':'&'
 		}
 	};
 });
@@ -131,6 +142,10 @@ app.controller('PersonListController', function ($scope, $modal, ContactService)
 	$scope.loadMore = function () {
 		console.log("Load More!!!");
 		$scope.contacts.loadMore();
+	};
+
+	$scope.parentDeleteUser = function (user){
+			$scope.contacts.removeContact(user);
 	};
 
 	$scope.showCreateModal = function () {
