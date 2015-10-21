@@ -62,7 +62,7 @@ app.config(function ($httpProvider, $resourceProvider, laddaProvider, $datepicke
 app.filter('defaultImage', function () {
 	return function (input, param) {
 		if (!input) {
-			return param
+			return param;
 		}
 		return input;
 	}
@@ -92,8 +92,16 @@ app.directive('ccCard', function () {
 		'restrict': 'AE',
 		'templateUrl': 'templates/card.html',
 		'scope': {
-			'user':'=',
-			'deleteUser':'&'
+			'user':'='
+		},
+		'controller': function ($scope, ContactService) {
+			$scope.isDeleting = false;
+			$scope.deleteUser = function(){
+				$scope.isDeleting = true;
+				ContactService.removeContact($scope.user).then(function () {
+					$scope.isDeleting = false;
+				});
+			};
 		}
 	};
 });
@@ -140,24 +148,8 @@ app.controller('PersonListController', function ($scope, $modal, ContactService)
 	$scope.contacts = ContactService;
 
 	$scope.loadMore = function () {
-		console.log("Load More!!!");
 		$scope.contacts.loadMore();
 	};
-
-	$scope.parentDeleteUser = function (user){
-			$scope.contacts.removeContact(user);
-	};
-
-	$scope.showCreateModal = function () {
-		$scope.contacts.selectedPerson = {};
-		$scope.createModal = $modal({
-			scope: $scope,
-			template: 'templates/modal.create.tpl.html',
-			show: true
-		})
-	};
-
-
 });
 
 app.service('ContactService', function (Contact, $rootScope, $q, toaster) {
